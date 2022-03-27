@@ -1,0 +1,3 @@
+Fecha y hora: 2022-03-27 17:34:18.308895, Comando: cal ejecutado correctamente
+Fecha y hora: 2022-03-27 17:34:21.028081, Comando: cal ejecutado correctamente
+/bin/sh: 1: coso: not found

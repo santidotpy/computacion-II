@@ -17,6 +17,7 @@ if __name__ == '__main__':
     l_file = os.open(args.log_file, os.O_WRONLY | os.O_CREAT | os.O_APPEND)
 
     p1 = Popen(args.command, shell=True, stdout=PIPE, stderr=PIPE)
+    # communicate retorna dos valores, en este caso el stdout y el stderr
     out, err = p1.communicate()
     log_out = f'Fecha y hora: {datetime.now()}, Comando: {args.command} ejecutado correctamente\n'.encode()
 

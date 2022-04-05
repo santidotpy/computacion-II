@@ -8,6 +8,7 @@ def create_child():
     if n == 0:
         p_id = os.getpid()
         print(f'{p_id} - {os.getppid()}: {sumar_pares(p_id)}')
+        os._exit(0)
     else:
         os.wait()
         print(f'SOY TU PADRE: {os.getpid()}\n')
@@ -20,6 +21,7 @@ def create_verbose_child():
         print('Inicio del nene: ', os.getpid())
         print(f'{p_id} - {os.getppid()}: {sumar_pares(p_id)}')
         print(f'Fin del nene {p_id}\n')
+        os._exit(0)
     else:
         os.wait()
         print(f'SOY TU PADRE: {os.getpid()}\n')
@@ -39,20 +41,20 @@ def sumar_pares(pid):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-n", "--numero", help="numero de procesos para generar")
-    parser.add_argument("-v", "--verboso", help="activa el modo verboso")
+    parser.add_argument("-n", "--numero", help="Numero de procesos para generar")
+    parser.add_argument("-v", "--verboso", help="Activa el modo verboso (1 para activarlo)")
 
     args = parser.parse_args()
 
     number_of_p = int(args.numero)
 
     if args.verboso:
-        for p in range(1, number_of_p):
+        for p in range(number_of_p):
             create_verbose_child()
             time.sleep(.5)
 
     else:
-        for p in range(1, number_of_p):
+        for p in range(number_of_p):
             create_child()
             time.sleep(.5)
 

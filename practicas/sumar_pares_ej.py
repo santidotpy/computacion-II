@@ -5,17 +5,25 @@ import time
 
 def create_child():
     n = os.fork()
-    if n != 0:
-        os.wait()
-        show_this = f'SOY TU PADRE: {os.getpid()}'
-        #return 'SOY TU PADRE ID: ', os.getpid()
-        return show_this
-    else:
+    if n == 0:
         p_id = os.getpid()
-        show_this = f'Soy el hijo {p_id}, la suma de mis numeros pares es: {sumar_pares(p_id)}'
-        #print('Total de la suma de sus numeros pares: ', sumar_pares(p_id))
-        #return 'Hijo ID: ', p_id
-        return show_this
+        print(f'{p_id} - {os.getppid()}: {sumar_pares(p_id)}')
+    else:
+        os.wait()
+        print(f'SOY TU PADRE: {os.getpid()}\n')
+        
+
+def create_verbose_child():
+    n = os.fork()
+    if n == 0:
+        p_id = os.getpid()
+        print('Inicio del nene: ', os.getpid())
+        print(f'{p_id} - {os.getppid()}: {sumar_pares(p_id)}')
+        print(f'Fin del nene {p_id}\n')
+    else:
+        os.wait()
+        print(f'SOY TU PADRE: {os.getpid()}\n')
+
 
 def sumar_pares(pid):
     n = 0
@@ -38,16 +46,14 @@ if __name__ == '__main__':
 
     number_of_p = int(args.numero)
 
-
-    # ver como implementar esto del verboso
     if args.verboso:
-        for p in range(number_of_p):
-            print(create_child())
+        for p in range(1, number_of_p):
+            create_verbose_child()
             time.sleep(.5)
 
     else:
-        for p in range(number_of_p):
-            print(create_child())
+        for p in range(1, number_of_p):
+            create_child()
             time.sleep(.5)
 
         

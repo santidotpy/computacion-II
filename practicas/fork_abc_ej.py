@@ -1,20 +1,8 @@
 import argparse
 import os
 from string import ascii_uppercase
+import time
 
-from matplotlib.pyplot import text
-
-
-#def create_child(letra):
-#   n = os.fork()
-#    if n == 0:
-#        p_id = os.getpid()
-#        print(letra)
-#        os._exit(0)
-
-    #else:
-    #    os.wait()
-    #    print(f'SOY TU PADRE: {os.getpid()}\n')
 
 
 if __name__ == '__main__':
@@ -29,18 +17,16 @@ if __name__ == '__main__':
     verb = int(args.verboso)
     repeticiones = int(args.repeticion)
     alphabet = list(ascii_uppercase)
-    print(repeticiones)
-    #this_is_my_file = os.open(args.path, os.O_WRONLY | os.O_CREAT | os.O_APPEND)
-
+    
+    # abro el archivo o lo crea
     if txt == os.getcwd():
-        f = os.open('abc.txt', os.O_WRONLY | os.O_CREAT)
+        f = open('abc.txt', 'w')
         #os.close(f)
     else:
-        f = os.open(txt, os.O_WRONLY | os.O_CREAT | os.O_APPEND)
+        f = open(txt, 'w')
 
-    # aca va el codigo que interactua con el archivo
+    # lo recorro para crear a los nenes
     for i in range(args.numero):
-        #create_child(alphabet[i])
 
         n = os.fork()
         if n == 0:
@@ -50,26 +36,31 @@ if __name__ == '__main__':
             if verb == 1:
                 print(f'Proceso <{p_id}> escribiendo letra {alphabet[i]}')
 
-            os.write(f, (alphabet[i]).encode())
+            # escribo en el archivo
+            f.write(alphabet[i])
+            #os.write(f, (alphabet[i]).encode())
+
+            f.flush()
+            time.sleep(1)
+            # segun la cantidad de repeticines especificada
             if repeticiones > 1:
                 r = 1
                 while r < repeticiones:
                     print(f'Proceso <{p_id}> escribiendo letra {alphabet[i]}')
-                    os.write(f, (alphabet[i]).encode())
+                    f.write(alphabet[i])
+                    #os.write(f, (alphabet[i]).encode())
+                    f.flush()
+                    time.sleep(1)
                     r += 1
-
-
 
             #os.write(f, (alphabet[i]).encode())
             os._exit(0)
-
         else:
             os.wait()
-
         #os.write(f, (alphabet[i]+'\n').encode()) 
-    os.close(f)
-
-
+    f.close()
+    
+    # Leo de nuevo los archivos para mostrarlos
     if txt == os.getcwd():
         with open('abc.txt') as fl:
             print('\n\nContenido del archivo: ')

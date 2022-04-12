@@ -2,6 +2,8 @@ import argparse
 import os
 from string import ascii_uppercase
 
+from matplotlib.pyplot import text
+
 
 #def create_child(letra):
 #   n = os.fork()
@@ -43,6 +45,8 @@ if __name__ == '__main__':
         n = os.fork()
         if n == 0:
             p_id = os.getpid()
+            
+            # modo verboso
             if verb == 1:
                 print(f'Proceso <{p_id}> escribiendo letra {alphabet[i]}')
 
@@ -62,14 +66,15 @@ if __name__ == '__main__':
         else:
             os.wait()
 
-        #os.write(f, (alphabet[i]+'\n').encode())
-
-    
-    
+        #os.write(f, (alphabet[i]+'\n').encode()) 
     os.close(f)
 
 
-
-    
-
-
+    if txt == os.getcwd():
+        with open('abc.txt') as fl:
+            print('\n\nContenido del archivo: ')
+            print(fl.read())
+    else:
+        with open(txt) as fl:
+            print('\n\nContenido del archivo: ')
+            print(fl.read())

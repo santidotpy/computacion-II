@@ -2,9 +2,6 @@ import argparse
 import os
 
 
-    #o_file = os.open(args.output_file, os.O_WRONLY | os.O_CREAT | os.O_APPEND)
-    #l_file = os.open(args.log_file, os.O_WRONLY | os.O_CREAT | os.O_APPEND)
-
 
 def create_child():
     n = os.fork()
@@ -25,25 +22,12 @@ if __name__ == '__main__':
     txt = args.file
     verb = int(args.verboso)
 
-    # abro el archivo o lo crea
-    #if txt == os.getcwd():
-    #    f = open('tuberiadeMario.txt')
-        #number_of_lines = len(f.readlines())
-        #os.close(f)
-    #else:
-    #    f = open(txt, 'r')
 
     if txt == os.getcwd():
         f = os.open('tuberiadeMario.txt', os.O_RDONLY)
         #os.close(f)
     else:
         f = os.open(txt, os.O_RDONLY)
-
-    #n_lines = len(f.readlines())
-    #with open(txt) as f:
-    #    n_lines = len(f.readlines())
-    #    print(n_lines)
-    #    print(f.readlines())
 
     #r, w = os.pipe()
     reading = os.read(f, 1024)

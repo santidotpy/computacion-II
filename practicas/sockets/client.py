@@ -2,8 +2,6 @@ import socket
 import argparse
 
 
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-ip", "--host", help="Dirección IP o nombre del servidor al que conectarse", default="127.0.0.1")
@@ -23,4 +21,5 @@ if __name__ == '__main__':
             else:
                 s.sendall(word.encode())
                 data = s.recv(1024).decode()
-                print(f"Output:\n {data!r}")
+                print(f"Output:\n {data}")
+                

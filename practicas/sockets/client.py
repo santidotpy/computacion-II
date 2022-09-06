@@ -13,7 +13,6 @@ if __name__ == '__main__':
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((h, p))
-        word = 'xd'
         while True:
             word = input('Write something to send: ')
             if word == 'exit':
@@ -22,4 +21,3 @@ if __name__ == '__main__':
                 s.sendall(word.encode())
                 data = s.recv(1024).decode()
                 print(f"Output:\n {data}")
-                

@@ -5,8 +5,8 @@
 # El servidor de shell debe mantener la concurrencia para atender a varios clientes, ya sea por procesos o hilos, dependiendo del parámetro pasado por argumento "-c".
 
 
-
 import socketserver, socket, threading
+from ecommands import exe_commands
 
 class MyTCPHandler(socketserver.BaseRequestHandler):
     """
@@ -19,21 +19,17 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
 
     def handle(self):
         # self.request is the TCP socket connected to the client
+        
         self.data = self.request.recv(1024).strip()
-        print("{} wrote:".format(self.client_address[0]))
-        print(self.data)
-        # just send back the same data, but upper-cased
-        self.request.sendall(self.data.upper())
-
-
-
+        print(f'{self.client_address[0]} said: {self.data.decode()}')
+        output = exe_commands(self.data.decode())
+        self.request.sendall(output.encode())
 
 class server_forking(socketserver.TCPServer, socketserver.ForkingMixIn):
     pass
 
 class server_threading(socketserver.TCPServer, socketserver.ThreadingMixIn):
     pass
-
 
 class server_forking_v6(socketserver.TCPServer, socketserver.ForkingMixIn):
     address_family = socket.AF_INET6
@@ -44,32 +40,24 @@ class server_threading_v6(socketserver.TCPServer, socketserver.ThreadingMixIn):
     pass
 
 
-
-
-# class server6 (socketserver.TCPServer):
-#     address_family = socket.AF_INET6
-#     pass
-# class server (socketserver.TCPServer):
-#     pass
-
-def servicio(d, c):
+def service(d, c):
     # en la pos 0 de d esta address family
     if c=='t':
         if d[0] == socket.AF_INET: 
-            print("ipv4")
+            print("IPV4")
             with server_threading((HOST, PORT), MyTCPHandler) as servidor:
                 servidor.serve_forever()
         elif d[0] == socket.AF_INET6:
-            print("ipv6")
+            print("IPV6")
             with server_threading_v6((HOST, PORT), MyTCPHandler) as servidor:
                 servidor.serve_forever()
     elif c=='p':
         if d[0] == socket.AF_INET: 
-            print("ipv4")
+            print("IPV4")
             with server_forking((HOST, PORT), MyTCPHandler) as servidor:
                 servidor.serve_forever()
         elif d[0] == socket.AF_INET6:
-            print("ipv6")
+            print("IPV6")
             with server_forking_v6((HOST, PORT), MyTCPHandler) as servidor:
                 servidor.serve_forever()
 
@@ -77,6 +65,7 @@ def servicio(d, c):
 if __name__ == "__main__":
     HOST, PORT = "localhost", 9999
     socketserver.TCPServer.allow_reuse_address = True
+    # c puede ser t o p
     c = 't'
     # Create the server, binding to localhost on port 9999
     direcciones = socket.getaddrinfo("localhost", 5000, socket.AF_UNSPEC, socket.SOCK_STREAM)
@@ -84,7 +73,7 @@ if __name__ == "__main__":
     print(direcciones)
     for d in direcciones:
         print(d[0])
-        hilo.append(threading.Thread(target=servicio, args=(d, c)))
+        hilo.append(threading.Thread(target=service, args=(d, c)))
 
     for h in hilo:
         h.start()

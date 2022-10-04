@@ -6,7 +6,7 @@ from threading import Thread
 
 # HOST = "127.0.0.1"
 # PORT = 65432
-def new_connection(host="127.0.0.1", port=65432):
+def new_connection(host="127.0.0.1", port=9999):
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
